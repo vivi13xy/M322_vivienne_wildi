@@ -1,0 +1,155 @@
+﻿@page "/fetchdata"
+@using Demo.Data
+@inject WeatherForecastService ForecastService
+<h1>Weather forecast</h1>
+<p style="color:red">@Error</p>
+@if (forecasts == null)
+{
+    <!-- Show this if the current user has no data... yet... -->
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <!-- Show the forecasts for the current user -->
+    <MudDataGrid Items="@forecasts" Filterable="false" SortMode="@SortMode.None" Groupable="false">
+        <Columns>
+            <PropertyColumn Property="x => x.Date" />
+            <PropertyColumn Property="x => x.TemperatureC" />
+            <PropertyColumn Property="x => x.TemperatureF" />
+            <PropertyColumn Property="x => x.Summary" />
+            
+
+            <TemplateColumn CellClass="d-flex justify-end">
+                <CellTemplate>
+                    <MudStack Row>
+                     <MudButton Size="@Size.Small" @onclick="@(()=>EditForecast(context.Item))" Variant="@Variant.Filled" Color="@Color.Primary">Edit</MudButton>
+
+
+                 </MudStack>
+             </CellTemplate>
+         </TemplateColumn>
+     </Columns>
+ </MudDataGrid>
+
+
+    <MudDialog @bind-IsVisible="ShowPopup" Options="dialogOptions">
+        <DialogContent>
+
+            <h3 class="modal-title">Edit Forecast</h3>
+
+            <!-- Edit form for the current forecast -->
+
+            <MudNumericField Label="Celsius forecast" HelperText="" Min="-60" Max="60"
+            @bind-Value="objWeatherForecast.TemperatureC" />
+            <MudNumericField Label="LastName" HelperText="" Min="-76" Max="140"
+            @bind-Value="objWeatherForecast.TemperatureF" />
+            <MudTextField Label="Summary" HelperText=""
+            @bind-Value="objWeatherForecast.Summary" />
+            <br />
+            <MudButton Variant="Variant.Filled" @onclick="SaveForecast" Color="Color.Primary"> Save</MudButton>
+
+                <!-- Button to save the forecast -->
+                <!-- Only show delete button if not a new record -->
+            @if (objWeatherForecast.Id > 0)
+                {
+
+                <MudButton Variant="Variant.Filled" @onclick="DeleteForecast" Color="Color.Error" Class="ma-3"> Delete</MudButton>
+
+                }
+            
+        </DialogContent>
+    </MudDialog>
+
+
+
+   
+}
+<MudButton Size="@Size.Small" Variant="@Variant.Filled" @onclick="AddNewForecast" Color="@Color.Primary">Add New Forecast</MudButton>
+
+@code
+{
+    private DialogOptions dialogOptions = new() { MaxWidth = MaxWidth.Medium, CloseButton = true };
+    string Error = "";
+    List<WeatherForecast> forecasts = new List<WeatherForecast>();
+    WeatherForecast objWeatherForecast = new WeatherForecast();
+    bool ShowPopup = false;
+    protected override async Task OnInitializedAsync()
+    {
+        // Get the forecasts
+        forecasts = await ForecastService.GetForecastAsync();
+    }
+    void AddNewForecast()
+    {
+        // Make new forecast
+        objWeatherForecast = new WeatherForecast();
+        // Set Id to 0 so we know it is a new record
+        objWeatherForecast.Id = 0;
+        // Open the Popup
+        ShowPopup = true;
+    }
+    void EditForecast(WeatherForecast weatherForecast)
+    {
+        // Set the selected forecast
+        // as the current forecast
+        objWeatherForecast = weatherForecast;
+        // Open the Popup
+        ShowPopup = true;
+    }
+    void ClosePopup()
+    {
+        // Close the Popup
+        ShowPopup = false;
+    }
+    async Task SaveForecast()
+    {
+        // Close the Popup
+        ShowPopup = false;
+        Error = "";
+        try
+        {
+            // A new forecast will have the Id set to 0
+            if (objWeatherForecast.Id == 0)
+            {
+                // Create new forecast
+                WeatherForecast objNewWeatherForecast = new WeatherForecast();
+                objNewWeatherForecast.Date = System.DateTime.Now;
+                objNewWeatherForecast.Summary = objWeatherForecast.Summary;
+                objNewWeatherForecast.TemperatureC =
+                Convert.ToInt32(objWeatherForecast.TemperatureC);
+                objNewWeatherForecast.TemperatureF =
+                Convert.ToInt32(objWeatherForecast.TemperatureF);
+                // Save the result
+                var NewWeatherForecast =
+                await ForecastService.CreateForecastAsync(objNewWeatherForecast);
+                // Add the Forcast
+                forecasts.Add(NewWeatherForecast);
+            }
+            else
+            {
+                // This is an update
+                await ForecastService.UpdateForecastAsync(objWeatherForecast);
+            }
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
+        }
+    }
+    async Task DeleteForecast()
+    {
+        // Close the Popup
+        ShowPopup = false;
+        try
+        {
+            Error = "";
+            // Delete the forecast
+            await ForecastService.DeleteForecastAsync(objWeatherForecast);
+            // Remove the Forcast
+            forecasts.Remove(objWeatherForecast);
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
+        }
+    }
+}

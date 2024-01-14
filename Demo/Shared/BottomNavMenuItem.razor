@@ -1,0 +1,79 @@
+﻿
+@using MudBlazor.Interfaces;
+@using MudBlazor.Utilities;
+@inherits MudBaseSelectItem
+
+<NavLink @onclick="@HandleNavigation"
+         @attributes="@Attributes"
+         Match="@Match"
+         ActiveClass="active-nav">
+    @if (!string.IsNullOrEmpty(Icon))
+    {
+        <MudIcon Icon="@Icon" Color="@IconColor" />
+    }
+
+    @if (Parent.ShowMenuTitle)
+    {
+        <span>@Title</span>
+    }
+
+    <strong></strong>
+
+</NavLink>
+
+
+@code{
+  
+        protected string Classname =>
+        new CssBuilder("mud-nav-item")
+          .AddClass($"mud-ripple", !DisableRipple && !Disabled)
+          .AddClass(Class)
+          .Build();
+
+        protected string LinkClassname =>
+        new CssBuilder("mud-nav-link")
+          .AddClass($"mud-nav-link-disabled", Disabled)
+          .Build();
+
+        protected string IconClassname =>
+        new CssBuilder("mud-nav-link-icon")
+          .AddClass($"mud-nav-link-icon-default", IconColor == Color.Default)
+          .Build();
+
+        private Dictionary<string, object> Attributes
+        {
+            get => Disabled ? null : new Dictionary<string, object>()
+            {
+                { "href", Href }
+            };
+        }
+
+        /// <summary>
+        /// Icon to use if set.
+        /// </summary>
+        [Parameter] public string Icon { get; set; }
+
+        /// <summary>
+        /// The color of the icon. It supports the theme colors, default value uses the themes drawer icon color.
+        /// </summary>
+        [Parameter] public Color IconColor { get; set; } = Color.Error;
+
+        [Parameter] public NavLinkMatch Match { get; set; } = NavLinkMatch.Prefix;
+
+        [Parameter] public string Target { get; set; }
+
+        [Parameter] public string Title { get; set; }
+
+        [CascadingParameter] INavigationEventReceiver NavigationEventReceiver { get; set; }
+        [CascadingParameter] BottomNavMenu Parent { get; set; }
+
+        private Task HandleNavigation()
+        {
+            if (!Disabled && NavigationEventReceiver != null)
+            {
+                return NavigationEventReceiver.OnNavigation();
+            }
+            return Task.CompletedTask;
+        }
+    
+}

@@ -1,0 +1,74 @@
+@page "/form"
+@using System.Text.RegularExpressions
+@using System.ComponentModel.DataAnnotations
+@inject NavigationManager NavigationManager
+
+<h3>Termin buchen</h3>
+
+
+<EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudGrid>
+        <MudItem xs="12" sm="7">
+            <MudCard>
+                <MudCardContent>
+                    <MudTextField Label="Vorname" HelperText="Max. 20 Zeichen"
+                                  @bind-Value="model.Firstname" For="@(() => model.Firstname)" />
+                    <MudTextField Label="Nachname" HelperText="Max. 20 Zeichen"
+                                  @bind-Value="model.Lastname" For="@(() => model.Lastname)" />
+                    <MudTextField Label="Email" Class="mt-3"
+                                  @bind-Value="model.Email" For="@(() => model.Email)" />
+                </MudCardContent>
+                <MudDatePicker Label="Tag  wählen"
+                               IsDateDisabledFunc="@((DateTime dt)=>((int)dt.DayOfWeek < 1 && (int)dt.DayOfWeek < 3))"
+                               AdditionalDateClassesFunc="@((DateTime dt)=>((int)dt.DayOfWeek == 0 ? "red-text text-accent-4" : ""))" />
+                <br />
+                <br />
+                <br />
+                <br />
+ 
+
+                <MudTimePicker PickerVariant="PickerVariant.Dialog" Label="Gewünschte Zeit wählen"  />
+
+                <MudCardActions>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Senden</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+
+        <MudItem xs="12">
+            <MudText Typo="Typo.body2" Align="Align.Center">
+                Füllen Sie alle Felder aus.
+            </MudText>
+        </MudItem>
+    </MudGrid>
+</EditForm>
+
+@code {
+    RegisterAccountForm model = new RegisterAccountForm();
+    bool success;
+
+    public class RegisterAccountForm
+    {
+        [Required]
+        [StringLength(20, ErrorMessage = "Der Vorname kann nicht länger als 20 Zeichen sein.")]
+        public string Firstname { get; set; }
+
+        [Required]
+        [StringLength(20, ErrorMessage = "Der Nachname kann nicht länger als 20 Zeichen sein.")]
+        public string Lastname { get; set; }
+
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
+
+    }
+
+    private void OnValidSubmit(EditContext context)
+    {
+        success = true;
+        StateHasChanged();
+        NavigationManager.NavigateTo("/card");
+    }
+
+}

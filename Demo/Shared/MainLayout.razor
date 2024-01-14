@@ -1,0 +1,109 @@
+﻿@inherits LayoutComponentBase
+<MudThemeProvider Theme="MyCustomTheme"/>
+<MudDialogProvider />
+<MudSnackbarProvider />
+<MudLayout>
+    @*<MudThemeManagerButton OnClick="@((e) => OpenThemeManager(true))" />*@
+    <MudThemeManager Open="_themeManagerOpen" OpenChanged="OpenThemeManager" Theme="_themeManager" ThemeChanged="UpdateTheme" />
+    
+    <MudAppBar Elevation="_themeManager.AppBarElevation">
+        @if (_navigationManager.Uri.Substring(_navigationManager.BaseUri.Length) != "")
+        {
+            <MudIconButton Href="back" Icon="@Icons.Material.Filled.ArrowBack" Color="Color.Inherit" Edge="Edge.Start" />
+        }
+        
+        <MudImage Src="images/logo.png" Alt="Logo" Height="50"/>
+
+        <MudSpacer />
+
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" OnClick="@((e) => DrawerToggle())" />
+    </MudAppBar>
+
+    <MudDrawer @bind-Open="_drawerOpen" Anchor="Anchor.Right" Class="rounded-t-l-lg rounded-b-l-lg" ClipMode="_themeManager.DrawerClipMode" Elevation="_themeManager.DrawerElevation" Variant="@DrawerVariant.Temporary">
+        <MudDrawerHeader Class="pa-0">
+            <MudCard Elevation="0" Class="pa-0" Square="true" Style="background-color: transparent">
+                <MudCardContent Class="d-flex flex-column justify-start py-3">
+                    <MudImage Src="/images/logo.jpg" Style="height: auto; width: 50%;  margin-left: auto; margin-right: auto; " />
+                    <MudText Align="Align.Center" Typo="Typo.subtitle1" Class="mt-3" Style="font-weight: 500;" Color="Color.Default">Multi-platform UI Kit</MudText>
+                    <MudChip Class="align-self-center" Color="Color.Error" Size="Size.Small">v2.0</MudChip>
+                </MudCardContent>
+            </MudCard>
+        </MudDrawerHeader>
+        <NavMenu />
+    </MudDrawer>
+
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.Large" Class="mt-5 mb-15 pt-0 pb-8">
+            @Body
+        </MudContainer>
+
+        <div class="my-8"></div>
+
+        <MudHidden Breakpoint="Breakpoint.MdAndDown" Invert="true">
+            <BottomNavMenu>
+                <BottomNavMenuItem Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.TwoTone.Cottage" IconColor="Color.Default" Title="Home"></BottomNavMenuItem>
+                <BottomNavMenuItem Href="/card" Match="NavLinkMatch.All" Icon="@Icons.Material.TwoTone.AirplaneTicket" IconColor="Color.Secondary" Title="Angebote"></BottomNavMenuItem>
+                <BottomNavMenuItem Href="/form" Match="NavLinkMatch.All" Icon="@Icons.Material.TwoTone.EditCalendar" IconColor="Color.Secondary" Title="Termine"></BottomNavMenuItem>
+            </BottomNavMenu>
+        </MudHidden>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    private ThemeManagerTheme _themeManager = new ThemeManagerTheme();
+    public bool _themeManagerOpen = false;
+    bool _drawerOpen = true;
+    const string RouteBack = "/back";
+
+    MudTheme MyCustomTheme = new MudTheme()
+        {
+            Palette = new PaletteLight()
+            {
+                Primary = "#41476b",
+                Secondary = "#dddfec",
+                AppbarBackground = "#a6897e",
+                Background = "dddfec",
+            },
+            PaletteDark = new PaletteDark()
+            {
+                Primary = "#585a55"
+            }
+        };
+
+    void OpenThemeManager(bool value)
+    {
+        _themeManagerOpen = value;
+    }
+
+    void UpdateTheme(ThemeManagerTheme value)
+    {
+        _themeManager = value;
+        StateHasChanged();
+    }
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    protected async override void OnInitialized()
+    {
+        // Register handler to detect "back" navigation route
+        _navigationManager.RegisterLocationChangingHandler(LocationChangingHandler);
+        StateHasChanged();
+    }
+
+    private async ValueTask LocationChangingHandler(LocationChangingContext context)
+    {
+        bool isBackRoute = context.TargetLocation.EndsWith(RouteBack, StringComparison.OrdinalIgnoreCase);
+
+        if (isBackRoute)
+        {
+            context.PreventNavigation();
+            await _jsRuntime.InvokeVoidAsync("history.back"); // Call javascript to navigate back
+        }
+    }
+
+
+
+}

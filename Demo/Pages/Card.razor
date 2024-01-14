@@ -1,0 +1,100 @@
+﻿@page "/card"
+<h3>Angebote</h3>
+
+<style>
+    .card-style {
+        border-radius: 20px;
+    }
+
+    .card-style-1 {
+        background-image: url(/images/tokyo.jpg);
+        background-size: cover !important;
+        background-position: center center !important;
+        border-radius: 20px;
+    }
+
+    .card-style-2 {
+        background-image: url(/images/sydney.jpg);
+        background-size: cover !important;
+        background-position: center center !important;
+        border-radius: 20px;
+    }
+
+    .card-style-3 {
+        background-image: url(/images/seoul.jpg);
+        background-size: cover !important;
+        background-position: center center !important;
+        border-radius: 20px;
+    }
+
+    .card-style-4 {
+        background-image: url(/images/helsinki.jpg);
+        background-size: cover !important;
+        background-position: center center !important;
+        border-radius: 20px;
+    }
+
+</style>
+
+
+<MudGrid Class="pt-5">
+    <MudItem xs="12">
+        <div class="hz-container mt-n15">
+            <MudCard Elevation="0" Class="mr-5 mud-theme-primary card-style">
+                <MudCardContent Class="d-flex flex-column justify-space-between card-style-1" Style="height: 400px; width: 280px;">
+                    <div class="d-flex justify-space-between">
+                        <MudText></MudText>
+                    </div>
+                    <MudPaper Class="ma-n2 pa-3 rounded-lg">
+                        <MudText Typo="Typo.subtitle1" Style="font-weight: 600;">Tokyo</MudText>
+                        <MudText Typo="Typo.body2">Erleben Sie eine unvergessliche Reise nach Tokyo</MudText>
+                    </MudPaper>
+                </MudCardContent>
+            </MudCard>
+
+            <MudCard Elevation="0" Class="mr-5 mud-theme-primary  card-style">
+                <MudCardContent Class="d-flex flex-column justify-space-between card-style-2" Style="height: 400px; width: 280px;">
+                    <div class="d-flex justify-space-between">
+                        <MudText></MudText>
+                    </div>
+                    <MudPaper Class="ma-n2 pa-3 rounded-lg">
+                        <MudText Typo="Typo.subtitle1" Style="font-weight: 600;">Sydney</MudText>
+                        <MudText Typo="Typo.body2">Erleben Sie eine unvergessliche Reise nach Sydney</MudText>
+                        
+                    </MudPaper>
+                </MudCardContent>
+            </MudCard>
+
+            <MudCard Elevation="0" Class="mr-5 mud-theme-primary  card-style">
+                <MudCardContent Class="d-flex flex-column justify-space-between card-style-3" Style="height: 400px; width: 280px;">
+                    <div class="d-flex justify-space-between">
+                        <MudText></MudText>
+                    </div>
+                    <MudPaper Class="ma-n2 pa-3 rounded-lg">
+                        <MudText Typo="Typo.subtitle1" Style="font-weight: 600;">Seoul</MudText>
+                        <MudText Typo="Typo.body2">Erleben Sie eine unvergessliche Reise nach Seoul</MudText>
+                        
+                    </MudPaper>
+                </MudCardContent>
+            </MudCard>
+
+            <MudCard Elevation="0" Class="mr-5 mud-theme-primary  card-style">
+                <MudCardContent Class="d-flex flex-column justify-space-between card-style-3" Style="height: 400px; width: 280px;">
+                    <div class="d-flex justify-space-between">
+                        <MudText></MudText>
+                    </div>
+                    <MudPaper Class="ma-n2 pa-3 rounded-lg">
+                        <MudText Typo="Typo.subtitle1" Style="font-weight: 600;">Helsinki</MudText>
+                        <MudText Typo="Typo.body2">Erleben Sie eine unvergessliche Reise nach Helsinki</MudText>
+                       
+                    </MudPaper>
+                </MudCardContent>
+            </MudCard>
+
+        </div>
+    </MudItem>
+</MudGrid>
+
+@code {
+    
+}

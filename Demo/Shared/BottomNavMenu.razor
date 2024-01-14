@@ -1,0 +1,17 @@
+﻿@inherits MudComponentBase
+
+<MudPaper Elevation="1">
+    <CascadingValue Value="this">
+        <div id="footer-bar" @attributes="UserAttributes" class="footer-bar" style="@Style">
+            @ChildContent
+        </div>
+    </CascadingValue>
+</MudPaper>
+
+@code{
+
+   
+        [Parameter] public RenderFragment ChildContent { get; set; }
+        [Parameter] public bool ShowMenuTitle { get; set; } = true;
+    
+}

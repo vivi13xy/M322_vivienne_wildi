@@ -1,0 +1,46 @@
+@page "/avatar"
+@using System.Text.RegularExpressions
+@using System.ComponentModel.DataAnnotations
+
+
+<MudPaper Elevation="0" Class="px-4 mx-n4 my-5 py-5 mud-theme-primary" Outlined="false" Square="true">
+    <MudText Typo="Typo.subtitle1" Style="font-weight: 600;">Unser Team</MudText>
+
+    <div class="hz-container pb-3 pt-5">
+        <MudCard Elevation="1" Outlined="false" Class="rounded-lg mr-3">
+            <MudCardContent Style="width: 160px;" Class="d-flex flex-column">
+                <MudImage Src="/images/avatar1.jpg" Class="align-self-center" Height="90"></MudImage>
+                <MudText Typo="Typo.subtitle1" Align="Align.Center" Style="font-weight: 500;" Class="align-self-center" Color="@Color.Surface">Kim Walter</MudText>
+                <MudText Typo="Typo.caption" Class="align-self-center" Align="Align.Center" Color="@Color.Default">Inhaberin</MudText>
+            </MudCardContent>
+        </MudCard>
+
+        <MudCard Elevation="1" Outlined="false" Class="rounded-lg mr-3">
+            <MudCardContent Style="width: 160px;" Class="d-flex flex-column">
+                <MudImage Src="/images/avatar2.jpg" Class="align-self-center" Height="90"></MudImage>
+                <MudText Typo="Typo.subtitle1" Align="Align.Center" Style="font-weight: 500;" Class="align-self-center" Color="@Color.Surface">Riley Ash</MudText>
+                <MudText Typo="Typo.caption" Class="align-self-center" Align="Align.Center" Color="@Color.Default">Beraterin</MudText>
+            </MudCardContent>
+        </MudCard>
+
+        <MudCard Elevation="1" Outlined="false" Class="rounded-lg mr-3">
+            <MudCardContent Style="width: 160px;" Class="d-flex flex-column">
+                <MudImage Src="/images/avatar3.jpg" Class="align-self-center" Height="90"></MudImage>
+                <MudText Typo="Typo.subtitle1" Align="Align.Center" Style="font-weight: 500;" Class="align-self-center" Color="@Color.Surface">Dave West</MudText>
+                <MudText Typo="Typo.caption" Class="align-self-center" Align="Align.Center" Color="@Color.Default">Berater</MudText>
+            </MudCardContent>
+        </MudCard>
+
+        <MudCard Elevation="1" Outlined="false" Class="rounded-lg mr-3">
+            <MudCardContent Style="width: 160px;" Class="d-flex flex-column">
+                <MudImage Src="/images/avatar4.jpg" Class="align-self-center" Height="90"></MudImage>
+                <MudText Typo="Typo.subtitle1" Align="Align.Center" Style="font-weight: 500;" Class="align-self-center" Color="@Color.Surface">Sunoo Kim</MudText>
+                <MudText Typo="Typo.caption" Class="align-self-center" Align="Align.Center" Color="@Color.Default">Berater</MudText>
+            </MudCardContent>
+        </MudCard>
+
+    </div>
+</MudPaper>
+@code {
+
+}
